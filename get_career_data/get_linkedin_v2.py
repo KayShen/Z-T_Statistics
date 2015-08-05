@@ -74,4 +74,4 @@ print contact_count
 
 # print a_length
 
-
+print 1
