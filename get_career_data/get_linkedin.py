@@ -6,7 +6,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
 import time
 
-os.chdir("/Users/Kay/Desktop/")
+os.chdir("/Volumes/Data/data")
 
 def log_in(driver, email_address, password):
 	driver.find_element_by_id('login-email').send_keys(email_address)
@@ -136,7 +136,7 @@ name_list = get_name_list(driver)
 driver.save_screenshot("temp.png")
 
 # def get_xml(driver, name_list, homepage, connection_page, k):
-for i in range(len(name_list))[108:]:
+for i in range(len(name_list))[142:]:
 	try:
 		driver.get(connection_page)
 	except Exception as e:
