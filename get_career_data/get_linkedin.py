@@ -85,7 +85,7 @@ def find_same_name_connection_number(driver):
 	return len(a)
 
 def click_connection(driver, connection_name, k):
-	all_con = driver.find_elements_by_xpath("//a[contains(text(),\""+ connection_name + "\")]")[k].click()
+	driver.find_elements_by_xpath("//a[contains(text(),\""+ connection_name + "\")]")[k].click()
 	return(driver)
 
 def click_contact_info(driver):
@@ -150,6 +150,8 @@ for i in range(len(name_list))[142:]:
 	print n_same_connection
 	print i
 	for j in range(n_same_connection):
+		if name_list[i] = "Mengqian Lu":
+			j = 1
 		time.sleep(3)
 		print "opening " + name_list[i] + " homepage"
 		driver.get(same_name_page)
