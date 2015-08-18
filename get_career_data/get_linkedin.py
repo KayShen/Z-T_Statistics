@@ -150,7 +150,7 @@ for i in range(len(name_list))[142:]:
 	print n_same_connection
 	print i
 	for j in range(n_same_connection):
-		if name_list[i] = "Mengqian Lu":
+		if name_list[i] == "Mengqian Lu":
 			j = 1
 		time.sleep(3)
 		print "opening " + name_list[i] + " homepage"
