@@ -6,20 +6,9 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
 import time
 
-dcap=dict(DesiredCapabilities.PHANTOMJS)
-dcap["phantomjs.page.settings.userAgent"] = (
-    "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.1) Gecko/20090624 Firefox/3.5"
-)
+os.chdir("/Users/Kay/Desktop/")
 
-driver = webdriver.PhantomJS()
-driver.set_window_size(1120,550)
-
-web_address = 'http://www.linkedin.com/'
-email_address = 'lumengqian.lulu@gmail.com'
-password = 'l12386'
-
-driver.get('http://www.linkedin.com/')
-def log_in(email_address, password):
+def log_in(driver, email_address, password):
 	driver.find_element_by_id('login-email').send_keys(email_address)
 	pw=driver.find_element_by_id('login-password')
 	ActionChains(driver).click(pw).send_keys(password).perform()
@@ -64,7 +53,7 @@ def pull_down_page(driver,write_dir):
 			elif counter ==4:
 				draw_down1 = False
 			counter = counter + 1	
-			time.sleep(5)
+			time.sleep(3)
 		print "find " + str(a_length) + " connections"
 	soup=BeautifulSoup(driver.page_source, "lxml")
 	a=soup.find_all('h3',attrs={'class':'name'})
@@ -95,47 +84,97 @@ def find_same_name_connection_number(driver):
 	a=soup.find_all('h3',attrs={'class':'name'})
 	return len(a)
 
-def click_connection(driver, connection_name):
-	driver.find_element_by_xpath("//a[contains(text(),\""+ connection_name + "\")]").click()
+def click_connection(driver, connection_name, k):
+	all_con = driver.find_elements_by_xpath("//a[contains(text(),\""+ connection_name + "\")]")[k].click()
 	return(driver)
 
 def click_contact_info(driver):
-	driver.find_element_by_id("contacs-tab").click()
+	try:
+		driver.find_element_by_id("contacs-tab").click()
+	except Exception as e:
+		driver.find_element_by_link_text("Contact Info").click()
 	return(driver)
 
-driver = log_in(email_address, password)
-homepage = driver.current_url
-print homepage
-driver = go_connection(driver,homepage)
-driver.save_screenshot("/Users/Kay/Desktop/temp.png")
-connection_page = driver.current_url
-print connection_page
+def find_public_url(driver):
+	public_url_loc = driver.find_element_by_id("relationship-public-profile-link")
+	return public_url_loc.text
+
+def get_name_list(driver):
+	contact_count = find_contact_count(driver)
+	write_dir = "aaa.xml"
+	found_contact = pull_down_page(driver,write_dir)
+	name_list = get_connection_name(driver)
+	return name_list
+
+def reload_page():
+	dcap=dict(DesiredCapabilities.PHANTOMJS)
+	dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.1) Gecko/20090624 Firefox/3.5")
+	driver = webdriver.PhantomJS()
+	driver.set_window_size(1120,550)
+	web_address = 'http://www.linkedin.com/'
+	email_address = 'lumengqian.lulu@gmail.com'
+	password = 'l12386'
+	driver.get('http://www.linkedin.com/')
+	driver = log_in(driver, email_address, password)
+	homepage = driver.current_url
+	print homepage
+	driver = go_connection(driver,homepage)
+	driver.save_screenshot("temp.png")
+	connection_page = driver.current_url
+	print connection_page
+	return (driver, homepage, connection_page)
 
 
-
-contact_count = find_contact_count(driver)
-write_dir = "/Users/Kay/Desktop/aaa.xml"
-found_contact = pull_down_page(driver,write_dir)
-name_list = get_connection_name(driver)
-driver.back()
+name_list = get_name_list(driver)
 
 
-homepage = driver.current_url
-print homepage
-driver = go_connection(driver,homepage)
-driver.save_screenshot("/Users/Kay/Desktop/temp.png")
-connection_page = driver.current_url
-print connection_page
+# homepage = driver.current_url
+# print homepage
+# driver = go_connection(driver,homepage)
+# connection_page = driver.current_url
+# print connection_page
+driver.save_screenshot("temp.png")
 
-for i in range(len(name_list)):
-	driver = search_connection(driver,name_list[i])
+# def get_xml(driver, name_list, homepage, connection_page, k):
+for i in range(len(name_list))[108:]:
+	try:
+		driver.get(connection_page)
+	except Exception as e:
+		(driver, homepage, connection_page) = reload_page()
+		driver.get(connection_page)
+	time.sleep(3)
+	driver = search_connection(driver,name_list[i].decode("UTF-8"))
+	time.sleep(3)
 	n_same_connection = find_same_name_connection_number(driver)
+	same_name_page = driver.current_url
+	print n_same_connection
+	print i
 	for j in range(n_same_connection):
-		driver = click_connection(driver, name_list[i])
+		time.sleep(3)
+		print "opening " + name_list[i] + " homepage"
+		driver.get(same_name_page)
+		time.sleep(3)
+		driver = click_connection(driver, name_list[i].decode("UTF-8"),j)
+		time.sleep(3)
+		try:
+			driver = click_contact_info(driver)
+		except Exception as e:
+			(driver, homepage, connection_page) = reload_page()
+			driver.get(connection_page)
+			time.sleep(3)
+			driver = search_connection(driver,name_list[i].decode("UTF-8"))
+			time.sleep(3)
+			same_name_page = driver.current_url
+			driver = click_connection(driver, name_list[i].decode("UTF-8"),j)
+			time.sleep(3)
+			driver = click_contact_info(driver)
+		time.sleep(3)
+		public_url = find_public_url(driver).encode("UTF-8")
 		soup=BeautifulSoup(driver.page_source, "lxml")
-		write_dir = "/Users/Kay/Desktop/aaa.xml"
-		f = open(write_dir, "w")
+		write_dir = "linkedin/" + re.sub("/", "|", str(public_url[29:])) + ".xml"
+		f = open(write_dir, "wb")
 		f.write(soup.prettify().encode("UTF-8"))
 		f.close()
-
+		driver.save_screenshot("linkedin_pic/" + re.sub("/", "|", str(public_url[29:])) + ".png")
+		print "xml saved"
 
