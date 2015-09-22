@@ -5,9 +5,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from bs4 import BeautifulSoup
 import time
-import pickle
-
-os.chdir("/Users/Kay/Desktop/lk/")
+import re
 
 def log_in(driver, email_address, password):
 	driver.find_element_by_id('login-email').send_keys(email_address)
@@ -18,15 +16,14 @@ def log_in(driver, email_address, password):
 
 
 def go_connection(driver,homepage):
-	driver.get("https://www.linkedin.com/contacts/?filter=recent&trk=nav_responsive_tab_network#?sortOrder=last_name&")
-	# nav_link = driver.find_elements_by_class_name('nav-link')
-	# itr = True
-	# while itr:
-	# 	ActionChains(driver).click(nav_link[2]).perform()
-	# 	if driver.current_url == homepage:
-	# 		time.sleep(5)
-	# 	else:
-	# 		itr = False
+	nav_link = driver.find_elements_by_class_name('nav-link')
+	itr = True
+	while itr:
+		ActionChains(driver).click(nav_link[2]).perform()
+		if driver.current_url == homepage:
+			time.sleep(5)
+		else:
+			itr = False
 	return driver
 
 def find_contact_count(driver):
@@ -81,7 +78,7 @@ def search_connection(driver,connection_name):
 	ActionChains(driver).click(search_place2).send_keys(connection_name+"\n").perform()
 	return driver
 
-def find_same_name_connection_number(driver, connection_name):
+def find_same_name_connection_number(driver):
 	a = driver.find_elements_by_xpath("//a[contains(text(),\""+ connection_name + "\")]")
 	return len(a)
 
@@ -125,56 +122,63 @@ def reload_page():
 	print connection_page
 	return (driver, homepage, connection_page)
 
-# (driver, homepage, connection_page) = reload_page()
-# driver.get(connection_page)
-# name_list = get_name_list(driver)
-# pickle.dump(name_list, open("name_list.p", "wb"))
-name_list = pickle.load(open( "name_list.p", "rb" ))
 
-for i in range(len(name_list))[356:]:
-	try:
-		driver.get(connection_page)
-	except Exception as e:
-		(driver, homepage, connection_page) = reload_page()
-		driver.get(connection_page)
-	time.sleep(3)
-	driver = search_connection(driver,name_list[i].decode("UTF-8"))
-	time.sleep(3)
-	n_same_connection = find_same_name_connection_number(driver,name_list[i])
-	same_name_page = driver.current_url
-	print n_same_connection
-	print i
-	for j in range(n_same_connection):
-		if name_list[i] == "Mengqian Lu":
-			j = 1
-		septemp = name_list[i].split(" ")
-		if len(septemp) != len(set(septemp)):
-			pass
-		time.sleep(3)
-		print "opening " + name_list[i] + " homepage"
-		driver.get(same_name_page)
-		time.sleep(3)
-		driver = click_connection(driver, name_list[i].decode("UTF-8"),j)
-		time.sleep(3)
+os.chdir("/Users/Kay/Desktop/lk/")
+
+file_path = os.listdir("first/")
+first_connection_list = []
+if '.DS_Store' in file_path:
+	file_path.remove('.DS_Store')
+
+# item = file_path[90]
+# f = open("first/"+item,"r")
+# temp = f.read()
+# f.close()
+# name = re.findall("full-name.*?<\/span>",temp,re.S)[0][41:-25].decode("UTF-8")
+# location_part = re.findall("locality\">.*?<\/a>",temp,re.S)[0][13:]
+# location = re.findall(">.*?<\/a>",location_part,re.S)[0][22:-24]
+# education_part = re.findall("background-education-container.*?<script>",temp,re.S)[0]
+# education_part2 = re.findall("<div id.*?<\/div>",education_part,re.S)
+# education_sample = education_part2[-1]
+# school_name = re.findall("for this school\">.*?</a>",education_sample,re.S)[1][34:-20]
+# degree = re.findall("<span class=\"degree.*?<\/span>",education_sample,re.S)[0][38:-24]
+# major_part = re.findall("<span class=\"major.*?<\/a>",education_sample,re.S)[0][38:]
+# major = re.findall(">.*?<\/a>",major_part,re.S)[0][19:-21]
+# try:
+# 	start_time = re.findall("<time>.*?<\/time>",education_sample,re.S)[0][22:-22]
+# except Exception as e:
+# 	start_time = ""
+
+# try:
+# 	end_time = re.findall("<time>.*?<\/time>",education_sample,re.S)[1][26:-22]
+# except Exception as e:
+# 	end_time = ""
+
+
+for i in range(len(file_path)):
+	item = file_path[i]
+	for j in range(len(friend_list)):
+		webpage = "https://www.linkedin.com/pub/"+re.sub("\|","/",item)[:-4]
 		try:
-			driver = click_contact_info(driver)
+			driver.get(webpage)
+			soup = BeautifulSoup(driver.page_source, "lxml")
+			if "Sign In" in str(soup):
+				(driver, homepage, connection_page) = reload_page()
+				driver.get(webpage)
+				soup = BeautifulSoup(driver.page_source, "lxml")
 		except Exception as e:
 			(driver, homepage, connection_page) = reload_page()
-			driver.get(connection_page)
-			time.sleep(3)
-			driver = search_connection(driver,name_list[i].decode("UTF-8"))
-			time.sleep(3)
-			same_name_page = driver.current_url
-			driver = click_connection(driver, name_list[i].decode("UTF-8"),j)
-			time.sleep(3)
-			driver = click_contact_info(driver)
-		time.sleep(3)
-		public_url = find_public_url(driver).encode("UTF-8")
-		soup=BeautifulSoup(driver.page_source, "lxml")
-		write_dir = "first/" + re.sub("/", "|", str(public_url[29:])) + ".xml"
-		f = open(write_dir, "wb")
-		f.write(soup.prettify().encode("UTF-8"))
-		f.close()
-		driver.save_screenshot("first_pic/" + re.sub("/", "|", str(public_url[29:])) + ".png")
-		print "xml saved"
+			driver.get(webpage)
+			soup = BeautifulSoup(driver.page_source, "lxml")
+
+		driver.save_screenshot("temp.png")
+		connect_loc = driver.find_element_by_class_name("connections-link")
+		ActionChains(driver).click(connect_loc).perform()
+		time.sleep(5)
+		search_loc = driver.find_elements_by_class_name("search-box standard-form")
+		ActionChains(driver).click(search_loc).send_keys(friend_list[j]+"\n").perform()
+		time.sleep(5)
+		# soup = str(BeautifulSoup(driver.page_source, "lxml"))
+		# print len(re.findall("<li id=\"connection-.*?<li>",soup,re.S))
+
 
