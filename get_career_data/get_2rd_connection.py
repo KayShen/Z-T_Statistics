@@ -55,7 +55,7 @@ def pull_down_page(driver,write_dir):
 				draw_down2 = False
 			elif counter ==4:
 				draw_down1 = False
-			counter = counter + 1	
+			counter = counter + 1
 			time.sleep(3)
 		print "find " + str(a_length) + " connections"
 	soup=BeautifulSoup(driver.page_source, "lxml")
@@ -143,7 +143,7 @@ if '.xml' in file_path:
 
 socket.setdefaulttimeout(60)
 first_connection_url_list = []
-for i in range(len(file_path))[2:]:
+for i in range(len(file_path))[0:]:
 	print "i = " + str(i)
 	item = file_path[i]
 	print item
@@ -175,8 +175,9 @@ for i in range(len(file_path))[2:]:
 	if connection_distance == "1":
 		print "mining"
 		connect_loc = driver.find_element_by_class_name("connections-link")
+		time.sleep(random.random()*2+2)
 		ActionChains(driver).click(connect_loc).perform()
-		time.sleep(random.random()*2+5)
+		time.sleep(random.random()*2+8)
 		print "connect location clicked"
 		driver.save_screenshot("temp.png")
 		condition1 = True
