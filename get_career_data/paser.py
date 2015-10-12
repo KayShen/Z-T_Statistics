@@ -178,6 +178,7 @@ for i in range(len(file_path)):
 		search_loc = driver.find_elements_by_class_name("search-box standard-form")
 		ActionChains(driver).click(search_loc).send_keys(friend_list[j]+"\n").perform()
 		time.sleep(5)
+		
 		# soup = str(BeautifulSoup(driver.page_source, "lxml"))
 		# print len(re.findall("<li id=\"connection-.*?<li>",soup,re.S))
 
