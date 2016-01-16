@@ -261,7 +261,7 @@ submission = cbind(driver_trip, submission$prob_final)
 write.csv(submission, 'submission.csv', row.names=F, quote=F)
 ```
 
-Winner Solution: https://github.com/PrincipalComponent/AXA_Telematics
-Winner Solution Description: http://blog.kaggle.com/2015/04/20/axa-winners-interview-learning-telematic-fingerprints-from-gps-data/
-trip matching: http://nycdatascience.com/kaggle-axa-telematics-trip-matching/
-more reference: https://rpubs.com/TimSch1/KaggleTelematics
+Winner Solution: https://github.com/PrincipalComponent/AXA_Telematics \n
+Winner Solution Description: http://blog.kaggle.com/2015/04/20/axa-winners-interview-learning-telematic-fingerprints-from-gps-data/ \n
+trip matching: http://nycdatascience.com/kaggle-axa-telematics-trip-matching/ \n
+more reference: https://rpubs.com/TimSch1/KaggleTelematics \n
