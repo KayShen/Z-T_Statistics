@@ -1,0 +1,643 @@
+days_delinquent_old_cat = factor(days_delinquent_old_cat, levels = seq(1,6))#
+days_delinquent_new_cat = factor(days_delinquent_new_cat, levels = seq(1,6))
+table(days_delinquent_old_cat, days_delinquent_new_cat)
+days_delinquent_old_cat = factor(days_delinquent_old_cat, levels = seq(1,6), labels = group_names)#
+days_delinquent_new_cat = factor(days_delinquent_new_cat, levels = seq(1,6), labels = group_names)
+table(days_delinquent_old_cat, days_delinquent_new_cat)
+library(markovchain)#
+data = read.csv("/Users/Kay/Google\ Drive/Jobs/Interview/onDeck/OnDeck\ Analytics\ Asssignment.csv",head = TRUE)#
+attach(data)#
+temp_cut = c(0,1,5,10,30,60, max(c(days_delinquent_old, days_delinquent_new))+1)#
+group_names = c("0","1-5","5-10","10-30","30-60","60+")#
+days_delinquent_old_cat = days_delinquent_old#
+days_delinquent_new_cat = days_delinquent_new#
+for (i in 1:length(group_names)){#
+	days_delinquent_old_cat[days_delinquent_old>= temp_cut[i] & days_delinquent_old < temp_cut[i+1]] = i#
+	days_delinquent_new_cat[days_delinquent_new>= temp_cut[i] & days_delinquent_new < temp_cut[i+1]] = i#
+}#
+days_delinquent_old_cat = factor(days_delinquent_old_cat, levels = seq(1,6), labels = group_names)#
+days_delinquent_new_cat = factor(days_delinquent_new_cat, levels = seq(1,6), labels = group_names)#
+tran_matrix = table(days_delinquent_old_cat, days_delinquent_new_cat)#
+tran_matrix = tran_matrix/rowSums(tran_matrix)
+tran_matrix
+head(data)
+library(markovchain)#
+data = read.csv("/Users/Kay/Google\ Drive/Jobs/Interview/onDeck/OnDeck\ Analytics\ Asssignment.csv",head = TRUE)#
+attach(data)#
+temp_cut = c(0,1,5,10,30,60, max(c(days_delinquent_old, days_delinquent_new))+1)#
+group_names = c("0","1-5","5-10","10-30","30-60","60+")#
+days_delinquent_old_cat = days_delinquent_old#
+days_delinquent_new_cat = days_delinquent_new#
+mean_pb = rep(0,6)#
+for (i in 1:length(group_names)){#
+	days_delinquent_old_cat[days_delinquent_old>= temp_cut[i] & days_delinquent_old < temp_cut[i+1]] = i#
+	days_delinquent_new_cat[days_delinquent_new>= temp_cut[i] & days_delinquent_new < temp_cut[i+1]] = i#
+	mean_pb[i] = mean(new_outstanding_principal_balance[days_delinquent_old>= temp_cut[i] & days_delinquent_old < temp_cut[i+1]])#
+}#
+days_delinquent_old_cat = factor(days_delinquent_old_cat, levels = seq(1,6), labels = group_names)#
+days_delinquent_new_cat = factor(days_delinquent_new_cat, levels = seq(1,6), labels = group_names)#
+tran_matrix = table(days_delinquent_old_cat, days_delinquent_new_cat)#
+tran_matrix = tran_matrix/rowSums(tran_matrix)
+tran_matrix
+tran_matrix[1][1]
+tran_matrix[2][1]
+weighted_tran_matrix = tran_matrix#
+for (i in 1:length(group_names)){#
+	for (j in 1:length(group_names)){#
+		weighted_tran_matrix[i][j] = sum(new_outstanding_principal_balance[days_delinquent_old_cat==i & days_delinquent_new_cat == j])#
+	}#
+}
+warnings
+warnings()
+weighted_tran_matrix
+i = 1
+j = 1
+new_outstanding_principal_balance[days_delinquent_old_cat==i & days_delinquent_new_cat == j]
+new_outstanding_principal_balance[days_delinquent_old_cat==2 & days_delinquent_new_cat == 2]
+days_delinquent_old_cat==2
+days_delinquent_old_cat
+new_outstanding_principal_balance[days_delinquent_old_cat== group_name[2 & days_delinquent_new_cat == group_names[2]]
+)
+new_outstanding_principal_balance[days_delinquent_old_cat== group_name[2] & days_delinquent_new_cat == group_names[2]]
+new_outstanding_principal_balance[days_delinquent_old_cat== group_names[2] & days_delinquent_new_cat == group_names[2]]
+weighted_tran_matrix = tran_matrix#
+for (i in 1:length(group_names)){#
+	for (j in 1:length(group_names)){#
+		weighted_tran_matrix[i][j] = sum(new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j])#
+	}#
+}
+weighted_tran_matrix = tran_matrix#
+for (i in 1:length(group_names)){#
+	for (j in 1:length(group_names)){#
+		weighted_tran_matrix[i][j] = sum(new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]])#
+	}#
+}
+weighted_train_matrix
+weighted_tran_matrix
+tran_matrix = table(days_delinquent_old_cat, days_delinquent_new_cat)
+train_matrix
+tran_matrix
+weighted_tran_matrix = tran_matrix#
+for (i in 1:length(group_names)){#
+	for (j in 1:length(group_names)){#
+		weighted_tran_matrix[i][j] = sum(new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]])#
+	}#
+}
+warnings()
+weighted_tran_matrix = tran_matrix#
+for (i in 1:length(group_names)){#
+	for (j in 1:length(group_names)){#
+		print (new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]])#
+		weighted_tran_matrix[i][j] = sum(new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]])#
+	}#
+}
+weighted_tran_matrix = tran_matrix#
+for (i in 1:length(group_names)){#
+	for (j in 1:length(group_names)){#
+		print (new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]])#
+		print (sum(new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]]))#
+		weighted_tran_matrix[i][j] = sum(new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]])#
+	}#
+}
+warnings()
+weighted_tran_matrix = matrix(0,nrow = 6, ncol = 6, )#
+for (i in 1:length(group_names)){#
+	for (j in 1:length(group_names)){#
+		print (new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]])#
+		print (sum(new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]]))#
+		weighted_tran_matrix[i][j] = sum(new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]])#
+	}#
+}
+weighted_tran_matrix
+weighted_tran_matrix = matrix(0,nrow = 6, ncol = 6, )#
+for (i in 1:length(group_names)){#
+	for (j in 1:length(group_names)){#
+		print (new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]])#
+		print (sum(new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]]))#
+		weighted_tran_matrix[i,j] = sum(new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]])#
+	}#
+}
+weighted_tran_matrix = tran_matrix#
+for (i in 1:length(group_names)){#
+	for (j in 1:length(group_names)){#
+		print (new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]])#
+		print (sum(new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]]))#
+		weighted_tran_matrix[i,j] = sum(new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]])#
+	}#
+}
+weighted_tran_matrix
+weighted_tran_matrix = tran_matrix#
+for (i in 1:length(group_names)){#
+	for (j in 1:length(group_names)){#
+		weighted_tran_matrix[i,j] = sum(new_outstanding_principal_balance[days_delinquent_old_cat==group_names[i] & days_delinquent_new_cat == group_names[j]])#
+	}#
+}#
+weighted_tran_matrix = weighted_tran_matrix/rowSums(weighted_tran_matrix)
+weighted_tran_matrix
+delinguent_difference = days_delinguent_new - days_delinquent_old
+delinguent_difference = days_delinquent_new - days_delinquent_old
+delinquent_new
+delinguent_difference
+as_of_date
+as.Date(as_of_date)
+as_of_date = as.Date(as_of_date, format = "%m/%d/%Y %H:%M:%S")#
+last_cleared_payment_date = as.Date(last_cleared_payment_date, formate = "%m/%d/%Y %H:%M:%S")#
+time_since_last_payment = as_of_date - last_cleared_payment_date
+time_since_last_payment
+last_cleared_payment_date
+time_since_last_payment = difftime(as_of_date,last_cleared_payment_date)
+time_since_last_payment
+time_since_last_payment = difftime(strptime(as_of_date),strptime(last_cleared_payment_date))
+time_since_last_payment = difftime(strptime(as_of_date,format = "%m/%d/%Y %H:%M:%S"),strptime(last_cleared_payment_date,format = "%m/%d/%Y %H:%M:%S"))
+time_since_last_payment
+strptime(as_of_date,format = "%m/%d/%Y %H:%M:%S")
+as_of_date = as.Date(as_of_date, format = "%m/%d/%Y %H:%M:%S")
+as_of_date
+data = read.csv("/Users/Kay/Google\ Drive/Jobs/Interview/onDeck/OnDeck\ Analytics\ Asssignment.csv",head = TRUE)#
+attach(data)
+as_of_date = as.Date(as_of_date, format = "%m/%d/%Y %H:%M:%S")
+as_of_date
+data = read.csv("/Users/Kay/Google\ Drive/Jobs/Interview/onDeck/OnDeck\ Analytics\ Asssignment.csv",head = TRUE)#
+attach(data)
+as_of_date
+data = read.csv("/Users/Kay/Google\ Drive/Jobs/Interview/onDeck/OnDeck\ Analytics\ Asssignment.csv",head = TRUE)#
+attach(data)
+as_of_date
+as_of_date_new = as.Date(as_of_date, format = "%m/%d/%Y %H:%M:%S")#
+last_cleared_payment_date_new = as.Date(last_cleared_payment_date, formate = "%m/%d/%Y %H:%M:%S")#
+time_since_last_payment = difftime(strptime(as_of_date_new,format = "%m/%d/%Y %H:%M:%S"),strptime(last_cleared_payment_date_new,format = "%m/%d/%Y %H:%M:%S"))
+time_since_last_payment
+as_of_date_new
+as_of_date
+as_of_date_new = as.Date(as_of_date, format = "%m/%d/%Y %H:%M:%S")
+as_of_date_new
+as_of_date_new = as.Date(as_of_date, format = "%d.%m.%Y")#
+last_cleared_payment_date_new = as.Date(last_cleared_payment_date, formate = "%d.%m.%Y")
+as_of_date_new
+as_of_date
+as_Date(as_of_date)
+as.Date(as_of_date)
+strptime(as.Date(as_of_date))
+strptime(as.Date(as_of_date),format = "%Y-%m-%d")
+as_of_date_new = strptime(as.Date(as_of_date, format = "%Y-%m-%d"))#
+last_cleared_payment_date_new = strptime(as.Date(last_cleared_payment_date, format = "%Y-%m-%d"))#
+time_since_last_payment = difftime(as_of_date_new, last_cleared_payment_date_new)
+as_of_date_new = strptime(as.Date(as_of_date),format = "%Y-%m-%d"))
+as_of_date_new = strptime(as.Date(as_of_date),format = "%Y-%m-%d")
+as_of_date_new
+last_cleared_payment_date_new = strptime(as.Date(last_cleared_payment_date), format = "%Y-%m-%d")
+last_cleared_payment_date_new
+time_since_last_payment = difftime(as_of_date_new, last_cleared_payment_date_new)
+time_since_last_payment
+time_since_last_payment = difftime(as_of_date_new, last_cleared_payment_date_new, units = "days")
+time_since_last_payment
+sales_channel_c
+sales_channel__c
+head(data)
+modified_data = data[,c(4,5,6,7,8,9,10,11,12)]
+modified_data
+head(modified_data)
+modified_data = cbind(modified_data,deliguent_difference)
+modified_data = cbind(modified_data,delinguent_difference)
+delinguent_difference = days_delinquent_new - days_delinquent_old
+modified_data = cbind(modified_data,delinguent_difference)
+modified_data
+head(modified_data)
+modified_data = data[,c(4,5,6,7,8,9,10,11,12)]#
+modified_data = cbind(modified_data,time_since_last_payment,delinguent_difference)
+head(modified_data)
+as.interger(time_since_last_payment)
+as.intergar(time_since_last_payment)
+as.intarger(time_since_last_payment)
+as.integer(time_since_last_payment)
+as_of_date_new = strptime(as.Date(as_of_date),format = "%Y-%m-%d")#
+last_cleared_payment_date_new = strptime(as.Date(last_cleared_payment_date), format = "%Y-%m-%d")#
+time_since_last_payment = as.integer(difftime(as_of_date_new, last_cleared_payment_date_new, units = "days"))#
+#
+modified_data = data[,c(4,5,6,7,8,9,10,11,12)]#
+modified_data = cbind(modified_data,time_since_last_payment,delinguent_difference)
+modified_data
+head(modified_data)
+reg = lm(delinguent_difference~., data = modified_data)
+reg
+summary(reg)
+head(term)
+step = stepAIC(reg, direction="both")#
+step$anova
+??stepAIC
+library(MASS)
+step = stepAIC(reg, direction="both")#
+step$anova
+reg = lm(delinguent_difference~., data = modified_data, na.action = na.omit)#
+step = stepAIC(reg, direction="both")#
+step$anova
+reg = lm(delinguent_difference~., data = modified_data, na.action = na.omit)#
+step = stepAIC(reg, direction="forward")#
+step$anova
+step = stepAIC(reg, direction="backward")#
+step$anova
+balancebalance_loan_percent = new_outstanding_principal_balance/initial_loan_amount
+balance_loan_percent = new_outstanding_principal_balance/initial_loan_amount
+balance_loan_percent
+library(leaps)
+install.packages("leaps")
+step
+data
+modified_data
+modified_data[is.na]
+new_data = modified_data[!row.has.na,]
+row.has.na <- apply(final, 1, function(x){any(is.na(x))})
+row.has.na <- apply(modified_data, 1, function(x){any(is.na(x))})
+sum(row.has.na)
+final.filtered <- final[!row.has.na,]
+modified_data = data[,c(4,5,6,7,8,9,10,11,12)]#
+modified_data = cbind(modified_data,time_since_last_payment,delinguent_difference)#
+row.has.na = apply(modified_data, 1, function(x){any(is.na(x))})#
+final_data = modified_data[!row.has.na,]
+reg = lm(delinguent_difference~., data = final_data, na.action = na.omit)#
+step = stepAIC(reg, direction="backward")#
+step$anova
+modified_data = data[,c(4,5,6,7,8,9,10,11,12)]#
+modified_data = cbind(modified_data,time_since_last_payment,delinguent_difference)#
+row.has.na = apply(modified_data, 1, function(x){any(is.na(x))})#
+final_data = modified_data[!row.has.na,]#
+reg = lm(delinguent_difference~., data = final_data, na.action = na.omit)#
+step = stepAIC(reg, direction="both")#
+step$anova
+modified_data = data[,c(4,5,6,7,8,9,10,11,12)]#
+modified_data = cbind(modified_data,time_since_last_payment,delinguent_difference,balance_loan_percent,bank_loan_ratio)#
+row.has.na = apply(modified_data, 1, function(x){any(is.na(x))})#
+final_data = modified_data[!row.has.na,]#
+reg = lm(delinguent_difference~., data = final_data, na.action = na.omit)#
+step = stepAIC(reg, direction="both")#
+step$anova
+as_of_date_new = strptime(as.Date(as_of_date),format = "%Y-%m-%d")#
+last_cleared_payment_date_new = strptime(as.Date(last_cleared_payment_date), format = "%Y-%m-%d")#
+time_since_last_payment = as.integer(difftime(as_of_date_new, last_cleared_payment_date_new, units = "days"))#
+balance_loan_percent = new_outstanding_principal_balance/initial_loan_amount#
+bank_loan_ratio = average_bank_balance/initial_loan_amount
+head(data)
+as_of_date_new = strptime(as.Date(as_of_date),format = "%Y-%m-%d")#
+last_cleared_payment_date_new = strptime(as.Date(last_cleared_payment_date), format = "%Y-%m-%d")#
+time_since_last_payment = as.integer(difftime(as_of_date_new, last_cleared_payment_date_new, units = "days"))#
+balance_loan_percent = new_outstanding_principal_balance/initial_loan_amount#
+bank_loan_ratio = average_bank_balance__c/initial_loan_amount
+modified_data = data[,c(4,5,6,7,8,9,10,11,12)]#
+modified_data = cbind(modified_data,time_since_last_payment,delinguent_difference,balance_loan_percent,bank_loan_ratio)
+modified_data
+row.has.na = apply(modified_data, 1, function(x){any(is.na(x))})#
+final_data = modified_data[!row.has.na,]#
+reg = lm(delinguent_difference~., data = final_data, na.action = na.omit)#
+step = stepAIC(reg, direction="both")#
+step$anova
+summary(step)
+plot(time_since_last_payment, balance_loan_percent)
+vif(step)
+library(MASS)
+??vif
+library(car)
+vif(step)
+mean(vif(step))
+fit2 = lm(delinguent_difference~time_since_last_payment+balance_loan_percent+current_collection_method,data=final_data)
+vif(fit2)
+shapiro.test(step$residuals)
+bptest(step)
+library(MASS)#
+library(car)#
+library(stats)#
+library(lmtest)
+install.packages(lmtest)
+install.packages('lmtest')
+library(MASS)#
+library(car)#
+library(stats)#
+library(lmtest)
+bptest(step)
+durbinWatsonTest(step)
+size(data)
+ncol(data)
+ncol(final_data)
+head(final_data)
+colnames(final_data
+)
+colnames(final_data) - "delinguent_difference"
+colnames(final_data)[-13]
+colnames(final_data)[-11]
+final_data["type"]
+par(mfrow=c(3,4))#
+for i in colnames(final_data)[-11]{#
+	plot(final_data[delinguent_difference],final_data[i])#
+}
+par(mfrow=c(3,4))#
+for (i in colnames(final_data)[-11]){#
+	plot(final_data[delinguent_difference],final_data[i])#
+}
+i
+par(mfrow=c(3,4))#
+for (i in colnames(final_data)[-11]){#
+	plot(final_data["delinguent_difference"],final_data[i])#
+}
+final_data["delinguent_difference"]
+plot(final_data["delinguent_difference"],final_data[i])
+par(mfrow=c(3,4))#
+for (i in 1:(ncol(final_data)-1)){#
+	plot(final_data[,11],final_data[,i])#
+}
+par(mfrow=c(3,4))#
+for (i in 1:(ncol(final_data))){#
+	if (i != 11){#
+		plot(final_data[,11],final_data[,i])#
+	}#
+#
+}
+par(mfrow=c(3,4))#
+for (i in 1:(ncol(final_data))){#
+	if (i != 11){#
+		plot(final_data[,11],final_data[,i], colname = "delinguent_difference")#
+	}#
+#
+}
+?plot
+par(mfrow=c(3,4))#
+for (i in 1:(ncol(final_data))){#
+	if (i != 11){#
+		plot(final_data[,11],final_data[,i], ylab = "delinguent_difference", xlb = colnames(final_data)[i])#
+	}#
+#
+}
+colnames(final_data)
+colnames(final_data)[i]
+par(mfrow=c(3,4))#
+for (i in 1:(ncol(final_data))){#
+	if (i != 11){#
+		plot(final_data[,11],final_data[,i], ylab = "delinguent_difference", xlab = colnames(final_data)[i])#
+	}#
+#
+}
+delinguent_difference_bi = rep(0,len(delinguent_difference))#
+delinguent_difference_bi[delinguent_difference>0] =1
+delinguent_difference_bi = rep(0,length(delinguent_difference))#
+delinguent_difference_bi[delinguent_difference>0] =1
+delinguent_difference_bi
+delinguent_difference_bi = as.factor(delinguent_difference_bi)
+delinguent_difference_bi
+delinguent_difference_bi = rep(0,length(delinguent_difference))#
+delinguent_difference_bi[delinguent_difference>0] =1 #
+delinguent_difference_bi = as.factor(delinguent_difference_bi)#
+modified_data_bi = cbind(modified_data,time_since_last_payment,delinguent_difference_bi,balance_loan_percent,bank_loan_ratio)#
+row.has.na = apply(modified_data_bi, 1, function(x){any(is.na(x))})#
+final_data_bi = modified_data[!row.has.na,]#
+#
+fit2 = lm(delinguent_difference_bi~. data = final_data_bi, family = "binomial")
+fit2 = lm(delinguent_difference_bi~., data = final_data_bi, family = "binomial")
+final_data_bi
+fit2 = lm(delinguent_difference_bi~., data = final_data_bi, family = "binomial")
+150/240
+library(survival)#
+data("colon")#
+#
+su_co<-subset(colon,etype==2 & rx %in% c("Lev","Lev+5FU"))#
+fittrt<-survfit(formula=Surv(time,status)~rx,data = su_co, type = "kaplan-meier")
+summary(fittrt)
+plot(fittrt,lty = c(1,2),col=c("red","blue"))#
+title(main="Survival Curve")#
+title(main="Kaplan-Meier Estimator",line=0.5)#
+legend("topright",c("Lev","Lev+5FU"),col=c("red","blue"),lty=c(1,3))
+summry(fittrt)
+summary(fittrt)
+fittrt
+library(survival)#
+data("colon")#
+#
+subdata<-subset(colon,etype==2 & rx %in% c("Lev","Lev+5FU"))#
+fit<-survfit(formula=Surv(time,status)~rx,data = subdata, type = "kaplan-meier")#
+fit
+logrank<-survdiff(Surv(time,status)~rx, data=subdata)#
+logrank
+subdata$rx_d<-as.numeric(subdata$rx=="Lev")#
+cox<-coxph(Surv(time,status)~rx_d+age+sex,data=subdata)
+summary(cox)
+factorial(9)
+117.23+160.2+216+212.91+74.13
+780.47+100.42*5
+1282.57/3
+5000+4000+5500+6400
+20900-20000+4000+600*5
+20900-20000+4000+600*8
+9700+1400*6
+Drivers <- as.numeric(list.files(path = "/Users/Kay/Desktop/drivers/drivers/"))
+Drivers
+1-0.8321-0.0267-0.0137-0.1198
+library)dplyr
+library(dplyr)
+library(dplyr)#
+setwd('/Users/Kay/Github/Z-T_Statistics/driver')#
+drivers = list.files("drivers")
+drivers
+library(dplyr)#
+setwd('/Users/Kay/Github/Z-T_Statistics/driver')#
+drivers = list.files("drivers")#
+load(paste0("drivers/",drivers[1]))#
+driverID<-gsub(driver[1],pattern="DriverData",replacement="")
+drivers
+drivers[1]
+library(doParallel)
+install.packages("doParallel")
+library(dplyr)#
+library(doParallel)#
+cl <- makeCluster(1)
+registerDoParallel(cores=3)
+filter.window <- c(0.075, 0.225,0.4,0.225, 0.075) #filter for the coordinates#
+halflength.filter.window <- (length(filter.window)-1)/2#
+#
+prefix <- "/Users/Kay/Github/Z-T_Statistics/driver/drivers" #directory where the diver directories are#
+#
+colorscheme <- heat.colors #function to generate colors to plot the trip#
+#
+smoothing.filter <- function(x)#
+{ #smoothing filter I apply to the positions#
+  xf <- as.vector(filter(x, filter.window))#
+  l <- length(x)#
+  xf[1:halflength.filter.window] <- x[1:halflength.filter.window] #we don't want to lose the first and last two records, replace from original   #
+  xf[(l-halflength.filter.window+1):l] <- x[(l-halflength.filter.window+1):l]	 #
+  xf#
+}#
+#
+dritrip <- function(driver, trip)#
+{ #reads a file given a driver and trip number.#
+  dt <- read.csv(paste(prefix, driver, "/", trip, ".csv", sep = ""))#
+  dt$x <- smoothing.filter(dt$x)#
+  dt$y <- smoothing.filter(dt$y)#
+  dt	#
+}#
+#
+plot.trip <- function(driver, trip)#
+{#
+	dt <- dritrip(driver,trip)#
+	l <- length(dt$x)#
+	plot(dt, xlab = "x", ylab = "y", type = "l", main = paste("Driver/trip: ", driver, "/", trip, ", Duration = ", l, " s", sep = ""))#
+	segments(x0 = dt$x[1:(l-1)], y0 = dt$y[1:(l-1)], x1 = dt$x[2:l], y1 = dt$y[2:l], col = colorscheme(l-1))#
+}#
+#
+plot.driver <- function(driver, xlim, ylim, trips)#
+{#
+	plot(xlim, ylim, xlim = xlim, ylim = ylim, xlab = "x", ylab = "y", type = "n", main = paste("Driver: ", driver, sep = ""))#
+#
+	plot.thistrip <- function(trip)#
+	{#
+		dt <- dritrip(driver,trip)#
+		l <- length(dt$x)#
+		segments(x0 = dt$x[1:(l-1)], y0 = dt$y[1:(l-1)], x1 = dt$x[2:l], y1 = dt$y[2:l], col = colorscheme(l-1))#
+	}#
+	sapply(trips, plot.thistrip)#
+}#
+#
+pdf("visua.pdf")#
+plot.trip(1,1)#
+plot.driver(1, c(-10000, 10000), c(-10000, 10000), 1:20)
+filter.window <- c(0.075, 0.225,0.4,0.225, 0.075) #filter for the coordinates#
+halflength.filter.window <- (length(filter.window)-1)/2#
+#
+prefix <- "/Users/Kay/Github/Z-T_Statistics/driver/drivers/1" #directory where the diver directories are#
+#
+colorscheme <- heat.colors #function to generate colors to plot the trip#
+#
+smoothing.filter <- function(x)#
+{ #smoothing filter I apply to the positions#
+  xf <- as.vector(filter(x, filter.window))#
+  l <- length(x)#
+  xf[1:halflength.filter.window] <- x[1:halflength.filter.window] #we don't want to lose the first and last two records, replace from original   #
+  xf[(l-halflength.filter.window+1):l] <- x[(l-halflength.filter.window+1):l]	 #
+  xf#
+}#
+#
+dritrip <- function(driver, trip)#
+{ #reads a file given a driver and trip number.#
+  dt <- read.csv(paste(prefix, driver, "/", trip, ".csv", sep = ""))#
+  dt$x <- smoothing.filter(dt$x)#
+  dt$y <- smoothing.filter(dt$y)#
+  dt	#
+}#
+#
+plot.trip <- function(driver, trip)#
+{#
+	dt <- dritrip(driver,trip)#
+	l <- length(dt$x)#
+	plot(dt, xlab = "x", ylab = "y", type = "l", main = paste("Driver/trip: ", driver, "/", trip, ", Duration = ", l, " s", sep = ""))#
+	segments(x0 = dt$x[1:(l-1)], y0 = dt$y[1:(l-1)], x1 = dt$x[2:l], y1 = dt$y[2:l], col = colorscheme(l-1))#
+}#
+#
+plot.driver <- function(driver, xlim, ylim, trips)#
+{#
+	plot(xlim, ylim, xlim = xlim, ylim = ylim, xlab = "x", ylab = "y", type = "n", main = paste("Driver: ", driver, sep = ""))#
+#
+	plot.thistrip <- function(trip)#
+	{#
+		dt <- dritrip(driver,trip)#
+		l <- length(dt$x)#
+		segments(x0 = dt$x[1:(l-1)], y0 = dt$y[1:(l-1)], x1 = dt$x[2:l], y1 = dt$y[2:l], col = colorscheme(l-1))#
+	}#
+	sapply(trips, plot.thistrip)#
+}#
+#
+pdf("visua.pdf")#
+plot.trip(1,1)#
+plot.driver(1, c(-10000, 10000), c(-10000, 10000), 1:20)
+library(dplyr)#
+setwd('/Users/Kay/Github/Z-T_Statistics/driver')#
+drivers = list.files("drivers")#
+driver = drivers[1]#
+driver_files <- list.files(path = paste("./drivers/",driver,sep=""))#
+for (file in driver_files){#
+	coord <- as.matrix(read.csv(paste("./drivers/",driver[1],"/", file, sep="")))
+}
+coord
+?mutate
+plot(x,y)
+plot(coord)
+coord
+setwd("/Users/Kay/Github/Z-T_Statistics/driver")#
+#
+library(dplyr)#
+library(doParallel)#
+cl <- makeCluster(1)#
+registerDoParallel(cores=3)#
+#
+dataDir <- "drivers/"#
+drivers <- list.files(dataDir)#
+# For selecting a range of drivers#
+lowBound = 1#
+highBound = 1#
+#
+runTime<-system.time({#
+similarTrips<-foreach(driver=drivers[lowBound:highBound],.combine=rbind) %dopar%{#
+  load(paste0(dataDir,driver))#
+  driverID<-gsub(driver,pattern="DriverData",replacement="")#
+  test<-drives %>%#
+    group_by(tripID) %>%#
+    mutate(x = x, y = y,#
+           r=sqrt(x^2+y^2),#
+           alpha=atan2(last(y),last(x))-atan2(y,x),#
+           rot.x=r*cos(alpha),#
+           rot.y=r*sin(alpha),#
+           rows=n(),#
+           rot.x.flip=ifelse(sum(rot.x<0)>floor(rows/2), -rot.x, rot.x),#
+           rot.y.flip=ifelse(sum(rot.y<0)>floor(rows/2), -rot.y, rot.y)#
+    )%>%#
+    select(tripID,rot.x=rot.x.flip,rot.y=rot.y.flip)#
+  mini2<-NULL#
+  # begin a nested loop to check all UNIQUE combinations of trips#
+  for(i in 1:199){#
+    focus<-select(test[test$tripID==i,],foc.x=rot.x,foc.y=rot.y)#
+    mini1<-NULL#
+    for(k in (i+1):200) {#
+      compare<-select(test[test$tripID==k,], cmp.x=rot.x, cmp.y=rot.y)#
+      # Necessary to only check trips that are even close to the same footprint (thanks to Jiayi Liu aka. JSon for the idea)#
+      if(!(diff(range(focus$foc.x))<0.8*diff(range(compare$cmp.x))) &#
+           !(diff(range(compare$cmp.x))<0.8*diff(range(focus$foc.x))) &#
+           !(diff(range(focus$foc.y))<0.8*diff(range(compare$cmp.y))) &#
+           !(diff(range(compare$cmp.y))<0.8*diff(range(focus$foc.y)))#
+      ){#
+#
+        trimLength<- min(nrow(compare),nrow(focus)) # Trimming instead of imputing values (Tim's suggestion) improves speed by 10%, catches more true positives#
+        focusTrim<-focus[1:trimLength,]#%>%#
+#           transmute(r.foc=sqrt(foc.x^2+foc.y^2)) # Option to use distance of point to origin#
+        compareTrim<-compare[1:trimLength,]#%>%#
+#           transmute(r.cmp=sqrt(cmp.x^2+cmp.y^2)) # Option to use distance of point to origin#
+        eqDistMat<-rbind(focusTrim$foc.y,compareTrim$cmp.y)#
+        mini1<-rbind(mini1,#
+                     data.frame(driver=driverID, tripA=i,tripB=k,#
+                  # this is the euclidian distance between y values of both curves#
+                  # it was necessary to normalize the result: trips with larger x and y values had higher euclidian distances#
+                  # I chose to normalize by the average "footprint" of the two trips#
+                   eucDist=unlist(as.numeric(dist(eqDistMat)))/mean(c(max(focusTrim$foc.y),max(compareTrim$cmp.y)))#
+                  ))#
+      } # end if loop#
+    } # end comparison loop#
+    mini2<-rbind(mini2,mini1)#
+  } # end focus loop#
+  mini2#
+}#
+})#
+outputFileName = paste0('similarTrips-y_',lowBound,'_',highBound)#
+save(similarTrips,file=outputFileName)
+setwd("/Users/Kay/Github/Z-T_Statistics/driver")#
+#
+library(dplyr)#
+library(doParallel)#
+cl <- makeCluster(1)#
+registerDoParallel(cores=3)#
+#
+dataDir <- "drivers/"#
+drivers <- list.files(dataDir)#
+# For selecting a range of drivers#
+lowBound = 1#
+highBound = 1
+drivers
+drivers[1:1]
+driver=drivers[lowBound:highBound]
+driver
+paste0(dataDir,driver)
+load(paste0(dataDir,driver))
+driver
+1
